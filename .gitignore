@@ -16,3 +16,4 @@ typechain-types
 cache
 artifacts
 
+.openzeppelin/*-1337.json
