@@ -49,10 +49,14 @@ describe("Access Control", () => {
       );
 
     const minterRole = await w3Bucket.MINTER_ROLE();
+    const initMinterRoleMemberCount = (await w3Bucket.getRoleMemberCount(minterRole)).toNumber();
     await expect(w3Bucket.grantRole(minterRole, Bob.address))
       .not.to.be.reverted;
     await expect(w3Bucket.connect(Bob).safeMint(Bob.address, 'ipfs://'))
       .not.to.be.reverted;
+    expect((await w3Bucket.getRoleMemberCount(minterRole)).toNumber())
+      .to.equal(initMinterRoleMemberCount + 1);
+    
 
     await expect(w3Bucket.connect(Bob).renounceRole(minterRole, Bob.address))
       .not.to.be.reverted;
