@@ -2,7 +2,7 @@ import { ethers, upgrades } from "hardhat";
 
 async function main() {
   const W3Bucket = await ethers.getContractFactory("W3Bucket");
-  const contract = await upgrades.deployProxy(W3Bucket, ["IPFS Cloud Card", "ICC"]);
+  const contract = await upgrades.deployProxy(W3Bucket, ["W3Bucket", "BK3"]);
   console.log(`Deployed W3Bucket to ${contract.address}`);
 }
 

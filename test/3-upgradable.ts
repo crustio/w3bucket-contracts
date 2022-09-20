@@ -9,7 +9,7 @@ describe("Upgradable", () => {
     const { w3Bucket, Alice, Bob } = await loadFixture(deployW3BucketFixture);
 
     const tokenId = 0;
-    await expect(w3Bucket.safeMint(Bob.address))
+    await expect(w3Bucket.safeMint(Bob.address, ''))
       .to.emit(w3Bucket, 'Transfer')
       .withArgs(anyValue, Bob.address, tokenId);
 

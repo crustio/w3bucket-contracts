@@ -6,6 +6,7 @@ pragma solidity ^0.8.9;
 
 import "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721EnumerableUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721URIStorageUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721BurnableUpgradeable.sol";
@@ -13,7 +14,7 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/CountersUpgradeable.sol";
 
-contract W3Bucket is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable, PausableUpgradeable, AccessControlUpgradeable, ERC721BurnableUpgradeable, UUPSUpgradeable {
+contract W3Bucket is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable, ERC721URIStorageUpgradeable, PausableUpgradeable, AccessControlUpgradeable, ERC721BurnableUpgradeable, UUPSUpgradeable {
     using CountersUpgradeable for CountersUpgradeable.Counter;
 
     bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
@@ -30,6 +31,7 @@ contract W3Bucket is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeab
     function initialize(string memory name, string memory symbol) initializer public {
         __ERC721_init(name, symbol);
         __ERC721Enumerable_init();
+        __ERC721URIStorage_init();
         __Pausable_init();
         __AccessControl_init();
         __ERC721Burnable_init();
@@ -41,9 +43,15 @@ contract W3Bucket is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeab
         _grantRole(UPGRADER_ROLE, msg.sender);
     }
 
-    function _baseURI() internal pure override returns (string memory) {
-        return "https://api.ipfs.studio/w3bucket/";
+    function tokenURI(uint256 tokenId)
+        public
+        view
+        override(ERC721Upgradeable, ERC721URIStorageUpgradeable)
+        returns (string memory)
+    {
+        return super.tokenURI(tokenId);
     }
+
 
     function pause() public onlyRole(PAUSER_ROLE) {
         _pause();
@@ -53,19 +61,21 @@ contract W3Bucket is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeab
         _unpause();
     }
 
-    function safeMint(address to) public onlyRole(MINTER_ROLE) {
+    function safeMint(address to, string memory uri) public onlyRole(MINTER_ROLE) {
         uint256 tokenId = _tokenIdCounter.current();
         _tokenIdCounter.increment();
         _safeMint(to, tokenId);
+        _setTokenURI(tokenId, uri);
     }
 
-    function safeBatchMint(address to, uint256 quantity) public onlyRole(MINTER_ROLE) {
-        for (uint256 i = 0; i < quantity; i++) {
-            uint256 tokenId = _tokenIdCounter.current();
-            _tokenIdCounter.increment();
-            _safeMint(to, tokenId);
-        }
+    // The following functions are overrides required by Solidity.
+    function _burn(uint256 tokenId)
+        internal
+        override(ERC721Upgradeable, ERC721URIStorageUpgradeable)
+    {
+        super._burn(tokenId);
     }
+
 
     function _beforeTokenTransfer(address from, address to, uint256 tokenId)
         internal

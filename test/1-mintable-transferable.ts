@@ -12,7 +12,7 @@ describe("Mintable && burnable && transferable", () => {
     const prevBalance = (await w3Bucket.balanceOf(Alice.address)).toNumber();
 
     const tokenId = 0;
-    await expect(w3Bucket.safeMint(Alice.address))
+    await expect(w3Bucket.safeMint(Alice.address, 'ipfs://'))
       .to.emit(w3Bucket, 'Transfer')
       .withArgs(anyValue, Alice.address, tokenId);
 
@@ -34,33 +34,11 @@ describe("Mintable && burnable && transferable", () => {
     expect(balanceAfterBurn).to.equal(balance - 1, 'Account balance should be decreased after burn');
   });
 
-  it('Batch mintable', async () => {
-    const { w3Bucket, Alice, Bob, Caro, Dave } = await loadFixture(deployW3BucketFixture);
-
-    const batchSize = 50;
-    await expect(w3Bucket.connect(Bob).safeBatchMint(Bob.address, batchSize))
-      .to.be.rejectedWith(
-        /AccessControl/,
-        'Bob should not be able to batch mint tokens'
-      );
-
-    await expect(w3Bucket.connect(Alice).safeBatchMint(Dave.address, batchSize))
-      .not.to.be.reverted;
-
-    expect(await w3Bucket.balanceOf(Dave.address)).to.equal(batchSize, 'Balance check should pass after batch mint');
-
-    const minterRole = await w3Bucket.MINTER_ROLE();
-    await w3Bucket.connect(Alice).grantRole(minterRole, Bob.address);
-    await expect(w3Bucket.connect(Bob).safeBatchMint(Dave.address, batchSize))
-      .not.to.be.reverted;
-    expect(await w3Bucket.balanceOf(Dave.address)).to.equal(batchSize * 2, 'Balance check should pass after batch mint again');
-  });
-
   it('Transferable', async () => {
     const { w3Bucket, Alice, Bob } = await loadFixture(deployW3BucketFixture);
 
     const tokenId = 0;
-    await expect(w3Bucket.safeMint(Alice.address))
+    await expect(w3Bucket.safeMint(Alice.address, 'ipfs://'))
       .to.emit(w3Bucket, 'Transfer')
       .withArgs(anyValue, Alice.address, tokenId);
 
