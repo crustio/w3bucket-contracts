@@ -1,12 +1,12 @@
-# IPFS Cloud Contracts
+# W3Bucket Contracts
 
 ## Quick start
 
 Cloning repository and install dependencies:
 
 ```sh
-$ git https://github.com/decooio/ipfscloud-contracts.git
-$ cd ipfscloud-contracts
+$ git https://github.com/decooio/w3bucket-contracts.git
+$ cd w3bucket-contracts
 $ yarn
 ```
 

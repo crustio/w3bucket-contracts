@@ -13,7 +13,7 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/CountersUpgradeable.sol";
 
-contract IPFSCloudCard is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable, PausableUpgradeable, AccessControlUpgradeable, ERC721BurnableUpgradeable, UUPSUpgradeable {
+contract W3Bucket is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable, PausableUpgradeable, AccessControlUpgradeable, ERC721BurnableUpgradeable, UUPSUpgradeable {
     using CountersUpgradeable for CountersUpgradeable.Counter;
 
     bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
@@ -42,7 +42,7 @@ contract IPFSCloudCard is Initializable, ERC721Upgradeable, ERC721EnumerableUpgr
     }
 
     function _baseURI() internal pure override returns (string memory) {
-        return "https://api.ipfs.studio/ipfscloudcard/";
+        return "https://api.ipfs.studio/w3bucket/";
     }
 
     function pause() public onlyRole(PAUSER_ROLE) {

@@ -1,9 +1,9 @@
 import { ethers, upgrades } from "hardhat";
 
 async function main() {
-  const IPFSCloudCard = await ethers.getContractFactory("IPFSCloudCard");
-  const contract = await upgrades.deployProxy(IPFSCloudCard, ["IPFS Cloud Card", "ICC"]);
-  console.log(`Deployed IPFSCloudCard to ${contract.address}`);
+  const W3Bucket = await ethers.getContractFactory("W3Bucket");
+  const contract = await upgrades.deployProxy(W3Bucket, ["IPFS Cloud Card", "ICC"]);
+  console.log(`Deployed W3Bucket to ${contract.address}`);
 }
 
 // We recommend this pattern to be able to use async/await everywhere

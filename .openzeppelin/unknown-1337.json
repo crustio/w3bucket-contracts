@@ -3,14 +3,14 @@
   "proxies": [
     {
       "address": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
-      "txHash": "0xae4fb9296444d5e3126a785f6ea93070f2ae9e24b1d7250ac6299fab2f9cbc8c",
+      "txHash": "0x85f61b71f40fdcf1b128fa26cd17aeff1482f20080b0d9d69706a930f7e2accc",
       "kind": "uups"
     }
   ],
   "impls": {
-    "56c8dc43c3845f448f4f32094686a00d71f08576cad3eb82b4047f4692c32499": {
+    "7b67c32113b29c0e66865b95796e1b47e2018ace15c463b2085603fb1423e67f": {
       "address": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
-      "txHash": "0xce6e9b619b362a54ef8341221fd72bf10529b3926b7e170fbb3ce39af20ac773",
+      "txHash": "0xf57c5704b1d8ad8b0464a5703deb4245fbadf64d2bfe9662e89eb898ed1809d2",
       "layout": {
         "storage": [
           {
@@ -203,8 +203,8 @@
             "offset": 0,
             "slot": "451",
             "type": "t_struct(Counter)2998_storage",
-            "contract": "IPFSCloudCard",
-            "src": "contracts/IPFSCloudCard.sol:23"
+            "contract": "W3Bucket",
+            "src": "contracts/W3Bucket.sol:23"
           }
         ],
         "types": {
@@ -313,9 +313,9 @@
         }
       }
     },
-    "446a95c6a3f924ff1a47e1a8a130057a57171b135cb468887ad22e1e67e3e243": {
+    "846f4aa6825a79f729ed2a07cfb841c7e72f82b38f65702878b020bacc1149e3": {
       "address": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
-      "txHash": "0x46396aa2e6a18b1b845c09026fe0a183d38cd2c77555b833effa301eb12e38c7",
+      "txHash": "0xa58c28f842fca3076c9cfad7cd1c2acd34fe75f0a48f58a85cd1a50c22aaa289",
       "layout": {
         "storage": [
           {
@@ -508,8 +508,8 @@
             "offset": 0,
             "slot": "451",
             "type": "t_struct(Counter)2998_storage",
-            "contract": "IPFSCloudCard",
-            "src": "contracts/IPFSCloudCard.sol:23"
+            "contract": "W3Bucket",
+            "src": "contracts/W3Bucket.sol:23"
           }
         ],
         "types": {

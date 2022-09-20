@@ -1,10 +1,10 @@
 import { ethers, upgrades } from "hardhat";
 
-export async function deployIPFSCloudCardFixture() {
-  const IPFSCloudCard = await ethers.getContractFactory("IPFSCloudCard");
-  const ipfsCloudCard = await upgrades.deployProxy(IPFSCloudCard, ["IPFS Cloud Card", "ICC"]);
+export async function deployW3BucketFixture() {
+  const W3Bucket = await ethers.getContractFactory("W3Bucket");
+  const w3Bucket = await upgrades.deployProxy(W3Bucket, ["IPFS Cloud Card", "ICC"]);
 
   const  [Alice, Bob, Caro, Dave]  = await ethers.getSigners();
 
-  return { ipfsCloudCard, Alice, Bob, Caro, Dave };
+  return { w3Bucket, Alice, Bob, Caro, Dave };
 }
