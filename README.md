@@ -6,40 +6,33 @@ Cloning repository and install dependencies:
 
 ```sh
 $ git https://github.com/decooio/w3bucket-contracts.git
+
 $ cd w3bucket-contracts
+
 $ yarn
 ```
-
-Run Hardhat's testing network:
+To compile contracts:
 
 ```sh
 # Use `hardhat-shorthand`:
-$ hh node
+$ hh compile
 
 # Use `yarn`:
-$ yarn run hardhat node
+$ yarn run hardhat compile
 
 # Use `npx`:
-$ npx hardhat node
+$ npx hardhat compile
 ```
 
-Then, on a new terminal, go to the repository's root folder and run this to deploy the contract:
+To run test cases,
 
 ```sh
-# Use `hardhat-shorthand`:
-$ hh scripts/deploy.js --network localhost
+$ hh test
 
-# Use `yarn`:
-$ yarn run hardhat run scripts/deploy.js --network localhost
+# To run test cases of a test file:
+$ hh test ./test/xxx.ts
 
-# Use `npx`:
-$ npx hardhat run scripts/deploy.js --network localhost
-```
-
-To run test,
-
-```sh
-# Use `hardhat-shorthand`:
+# To run all test cases with gas report:
 $ REPORT_GAS=true hh test
 ```
 

@@ -7,21 +7,35 @@ pragma solidity ^0.8.9;
 import "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721EnumerableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721URIStorageUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/access/AccessControlEnumerableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721BurnableUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/access/AccessControlEnumerableUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/utils/structs/EnumerableMapUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/utils/CountersUpgradeable.sol";
 
-contract W3Bucket is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable, ERC721URIStorageUpgradeable, PausableUpgradeable, AccessControlEnumerableUpgradeable, ERC721BurnableUpgradeable, UUPSUpgradeable {
+import "./lib/CurrencyTransferLib.sol";
+import "./BucketEditionUpgradable.sol";
+
+contract W3Bucket is
+    Initializable,
+    ERC721Upgradeable,
+    ERC721EnumerableUpgradeable,
+    ERC721URIStorageUpgradeable,
+    PausableUpgradeable,
+    AccessControlEnumerableUpgradeable,
+    ReentrancyGuardUpgradeable,
+    ERC721BurnableUpgradeable,
+    UUPSUpgradeable,
+    BucketEditionUpgradable
+{
     using CountersUpgradeable for CountersUpgradeable.Counter;
+    using EnumerableMapUpgradeable for EnumerableMapUpgradeable.UintToUintMap;
+    using EnumerableMapUpgradeable for EnumerableMapUpgradeable.AddressToUintMap;
 
     bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
-    bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
     bytes32 public constant UPGRADER_ROLE = keccak256("UPGRADER_ROLE");
-
-    CountersUpgradeable.Counter private _tokenIdCounter;
 
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() {
@@ -36,11 +50,13 @@ contract W3Bucket is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeab
         __AccessControl_init();
         __ERC721Burnable_init();
         __UUPSUpgradeable_init();
+        __BucketEditionUpgradable_init();
 
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _grantRole(PAUSER_ROLE, msg.sender);
-        _grantRole(MINTER_ROLE, msg.sender);
         _grantRole(UPGRADER_ROLE, msg.sender);
+        _grantRole(EDITIONS_ADMIN_ROLE, msg.sender);
+        _grantRole(WITHDRAWER_ROLE, msg.sender);
     }
 
     function tokenURI(uint256 tokenId)
@@ -60,12 +76,37 @@ contract W3Bucket is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeab
     function unpause() public onlyRole(PAUSER_ROLE) {
         _unpause();
     }
+    
+    function mint(
+        address to,
+        uint256 editionId,
+        address currency,
+        string calldata uri
+    ) external payable nonReentrant 
+    {
+        require(_msgSender() == tx.origin, 'BOT');
 
-    function safeMint(address to, string memory uri) public onlyRole(MINTER_ROLE) {
-        uint256 tokenId = _tokenIdCounter.current();
-        _tokenIdCounter.increment();
-        _safeMint(to, tokenId);
-        _setTokenURI(tokenId, uri);
+        _requireActiveEdition(editionId);
+
+        uint256 maxSupply = _allEditionsMaxSupply.get(editionId);
+        uint256 supplyMinted = _allEditionsCurrentSupplyMinted.get(editionId);
+        require(supplyMinted < maxSupply, 'Exceed max mintable supply');
+
+        EnumerableMapUpgradeable.AddressToUintMap storage editionPrices = _allEditionPrices[editionId];
+        require(editionPrices.contains(currency), 'Invalid currency');
+
+        uint256 price = editionPrices.get(currency);
+        if (currency == CurrencyTransferLib.NATIVE_TOKEN) {
+            require(msg.value == price, "Must send required price");
+        }
+        CurrencyTransferLib.transferCurrency(currency, _msgSender(), address(this), price);
+
+        uint256 nextTokenId = _nextEditionTokenId(editionId);
+        _safeMint(to, nextTokenId);
+        _setTokenURI(nextTokenId, uri);
+        _editionTokenMinted(editionId);
+
+        emit BucketMinted(to, editionId, nextTokenId);
     }
 
     // The following functions are overrides required by Solidity.
