@@ -59,6 +59,8 @@ contract W3Bucket is
         _grantRole(WITHDRAWER_ROLE, msg.sender);
     }
 
+    receive() external payable virtual {}
+
     function tokenURI(uint256 tokenId)
         public
         view
@@ -87,16 +89,19 @@ contract W3Bucket is
         require(_msgSender() == tx.origin, 'BOT');
 
         _requireActiveEdition(editionId);
+        // console.log('mint, edition active: %s', editionId);
 
         uint256 maxSupply = _allEditionsMaxSupply.get(editionId);
-        uint256 supplyMinted = _allEditionsCurrentSupplyMinted.get(editionId);
+        uint256 supplyMinted = _allEditionsCurrentSupplyMinted.contains(editionId) ? _allEditionsCurrentSupplyMinted.get(editionId) : 0;
         require(supplyMinted < maxSupply, 'Exceed max mintable supply');
+        // console.log('mint, edition max supply: %s, currently minted: %s', maxSupply, supplyMinted);
 
         EnumerableMapUpgradeable.AddressToUintMap storage editionPrices = _allEditionPrices[editionId];
         require(editionPrices.contains(currency), 'Invalid currency');
 
         uint256 price = editionPrices.get(currency);
         if (currency == CurrencyTransferLib.NATIVE_TOKEN) {
+            // console.log('mint, native currency, msg.value: %s', msg.value);
             require(msg.value == price, "Must send required price");
         }
         CurrencyTransferLib.transferCurrency(currency, _msgSender(), address(this), price);

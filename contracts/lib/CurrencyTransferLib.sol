@@ -7,7 +7,7 @@ library CurrencyTransferLib {
     using SafeERC20Upgradeable for IERC20Upgradeable;
 
     /// @dev The address interpreted as native token of the chain.
-    address public constant NATIVE_TOKEN = 0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE;
+    address public constant NATIVE_TOKEN = 0x0000000000000000000000000000000000000000;
 
     /// @dev Transfers a given amount of currency.
     function transferCurrency(

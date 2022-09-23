@@ -1,6 +1,9 @@
 // SPDX-License-Identifier: Apache-2.0
 pragma solidity ^0.8.9;
 
+// Uncomment this line to use console.log
+// import "hardhat/console.sol";
+
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/access/AccessControlEnumerableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/CountersUpgradeable.sol";
@@ -94,12 +97,12 @@ abstract contract BucketEditionUpgradable is Initializable, AccessControlEnumera
     }
 
     function _nextEditionTokenId(uint256 editionId) internal view returns (uint256) {
-        uint256 supplyMinted = _allEditionsCurrentSupplyMinted.get(editionId);
+        uint256 supplyMinted = _allEditionsCurrentSupplyMinted.contains(editionId) ? _allEditionsCurrentSupplyMinted.get(editionId) : 0;
         return SafeMathUpgradeable.add(SafeMathUpgradeable.mul(editionId, EDITION_TOKEN_ID_FACTOR), supplyMinted);
     }
 
     function _editionTokenMinted(uint256 editionId) internal {
-        uint256 supplyMinted = _allEditionsCurrentSupplyMinted.get(editionId);
+        uint256 supplyMinted = _allEditionsCurrentSupplyMinted.contains(editionId) ? _allEditionsCurrentSupplyMinted.get(editionId) : 0;
         _allEditionsCurrentSupplyMinted.set(editionId, supplyMinted + 1);
     }
 
@@ -116,6 +119,7 @@ abstract contract BucketEditionUpgradable is Initializable, AccessControlEnumera
             _allEditions.add(edition.editionId);
             _allEditionsMaxSupply.set(edition.editionId, edition.maxMintableSupply);
             _allEditionsVersion.set(edition.editionId, version);
+            // console.log('setBucketEditions, %s, edition id: %s, maxMintableSupply: %s', i, edition.editionId, edition.maxMintableSupply);
 
             emit EditionUpdated(edition.editionId, edition.maxMintableSupply);
         }
@@ -128,23 +132,26 @@ abstract contract BucketEditionUpgradable is Initializable, AccessControlEnumera
     {
         uint256 count = 0;
         uint256 currentVersion = _currentEditionsVersion.current();
+        // console.log('getBucketEditions, currentVersion: %s', currentVersion);
+
         for (uint256 i = 0; i < _allEditions.length(); i++) {
             uint256 editionId = _allEditions.at(i);
 
             bool active = _allEditionsVersion.get(editionId) == currentVersion;
-            uint256 currentSupplyMinted = _allEditionsCurrentSupplyMinted.get(editionId);
+            uint256 currentSupplyMinted = _allEditionsCurrentSupplyMinted.contains(editionId) ? _allEditionsCurrentSupplyMinted.get(editionId) : 0;
             bool shouldInclude = active || (!activeOnly && currentSupplyMinted > 0);
             if (shouldInclude) {
                 count++;
             }
         }
+        // console.log('getBucketEditions, count: %s', count);
 
         BucketEdition[] memory editions = new BucketEdition[](count);
         for (uint256 i = 0; i < _allEditions.length(); i++) {
             uint256 editionId = _allEditions.at(i);
 
             bool active = _allEditionsVersion.get(editionId) == currentVersion;
-            uint256 currentSupplyMinted = _allEditionsCurrentSupplyMinted.get(editionId);
+            uint256 currentSupplyMinted = _allEditionsCurrentSupplyMinted.contains(editionId) ? _allEditionsCurrentSupplyMinted.get(editionId) : 0;
             bool shouldInclude = active || (!activeOnly && currentSupplyMinted > 0);
             if (shouldInclude) {
                 editions[i].editionId = editionId;
