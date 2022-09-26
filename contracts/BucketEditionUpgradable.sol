@@ -147,6 +147,7 @@ abstract contract BucketEditionUpgradable is Initializable, AccessControlEnumera
         // console.log('getBucketEditions, count: %s', count);
 
         BucketEdition[] memory editions = new BucketEdition[](count);
+        uint256 index = 0;
         for (uint256 i = 0; i < _allEditions.length(); i++) {
             uint256 editionId = _allEditions.at(i);
 
@@ -154,10 +155,11 @@ abstract contract BucketEditionUpgradable is Initializable, AccessControlEnumera
             uint256 currentSupplyMinted = _allEditionsCurrentSupplyMinted.contains(editionId) ? _allEditionsCurrentSupplyMinted.get(editionId) : 0;
             bool shouldInclude = active || (!activeOnly && currentSupplyMinted > 0);
             if (shouldInclude) {
-                editions[i].editionId = editionId;
-                editions[i].active = active;
-                editions[i].maxMintableSupply = _allEditionsMaxSupply.get(editionId);
-                editions[i].currentSupplyMinted = currentSupplyMinted;
+                editions[index].editionId = editionId;
+                editions[index].active = active;
+                editions[index].maxMintableSupply = _allEditionsMaxSupply.get(editionId);
+                editions[index].currentSupplyMinted = currentSupplyMinted;
+                index++;
             }
         }
 

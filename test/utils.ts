@@ -12,7 +12,7 @@ export async function deployW3BucketFixture() {
   const w3Bucket = W3Bucket__factory.connect(w3BucketProxy.address, provider);
 
   const TestERC20 = await ethers.getContractFactory('TestERC20');
-  const testERC20Proxy = await upgrades.deployProxy(TestERC20, ['TestERC20', 'TEC']);
+  const testERC20Proxy = await upgrades.deployProxy(TestERC20, ['TestERC20', 'TRC']);
   const testERC20 = TestERC20__factory.connect(testERC20Proxy.address, provider);
 
   const  [Alice, Bob, Caro, Dave]  = await ethers.getSigners();
