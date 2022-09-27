@@ -7,7 +7,11 @@ import "../W3Bucket.sol";
 contract TestW3BucketV2 is W3Bucket {
   using StringsUpgradeable for uint256;
 
-  function _baseURI() internal pure override returns (string memory) {
-      return "https://api.ipfs.studio/w3bucketv2/";
+  function funcV2()
+      public
+      pure
+      returns (bool)
+  {
+      return true;
   }
 }

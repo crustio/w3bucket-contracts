@@ -70,6 +70,9 @@ const config: HardhatUserConfig = {
   abiExporter: {
     flat: true,
   },
+  mocha: {
+    parallel: true
+  },
   typechain: {
     outDir: "typechain",
     target: "ethers-v5",

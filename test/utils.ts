@@ -26,29 +26,45 @@ export async function deployW3BucketWithEditionsFixture() {
   const w3Bucket = W3Bucket__factory.connect(w3BucketProxy.address, provider);
 
   const TestERC20 = await ethers.getContractFactory('TestERC20');
-  const testERC20Proxy = await upgrades.deployProxy(TestERC20, ['TestERC20', 'TEC']);
+  const testERC20Proxy = await upgrades.deployProxy(TestERC20, ['TestERC20', 'TRC']);
   const testERC20 = TestERC20__factory.connect(testERC20Proxy.address, provider);
 
   const  [Alice, Bob, Caro, Dave]  = await ethers.getSigners();
 
   await w3Bucket.connect(Alice).setBucketEditions([
-    { editionId: 1, maxMintableSupply: 1_000_000 },
-    { editionId: 2, maxMintableSupply: 100_000 },
-    { editionId: 3, maxMintableSupply: 5_000 },
+    { editionId: 6, maxMintableSupply: 666 },
+    { editionId: 8, maxMintableSupply: 888 },
+    { editionId: 9, maxMintableSupply: 999 },
   ]);
 
   const testERC20Decimal = await testERC20.decimals();
-  await w3Bucket.connect(Alice).setBucketEditionPrices(1, [
-    { currency: testERC20.address, price: ethers.utils.parseUnits('1', testERC20Decimal) },
+  await w3Bucket.connect(Alice).setBucketEditionPrices(6, [
+    { currency: testERC20.address, price: ethers.utils.parseUnits('6.6', testERC20Decimal) },
   ]);
-  await w3Bucket.connect(Alice).setBucketEditionPrices(2, [
-    { currency: nativeTokenAddress, price: ethers.utils.parseEther('0.5') },
-    { currency: testERC20.address, price: ethers.utils.parseUnits('5', testERC20Decimal) },
+  await w3Bucket.connect(Alice).setBucketEditionPrices(8, [
+    { currency: nativeTokenAddress, price: ethers.utils.parseEther('0.8') },
+    { currency: testERC20.address, price: ethers.utils.parseUnits('8.8', testERC20Decimal) },
   ]);
-  await w3Bucket.connect(Alice).setBucketEditionPrices(3, [
-    { currency: nativeTokenAddress, price: ethers.utils.parseEther('1.5') },
+  await w3Bucket.connect(Alice).setBucketEditionPrices(9, [
+    { currency: nativeTokenAddress, price: ethers.utils.parseEther('9.9') },
   ]);
 
+  const testData = {
+    edition: {
+      id: 8,
+      prices: {
+        nativeEther: {
+          address: nativeTokenAddress,
+          price: 0.8
+        },
+        erc20: {
+          address: testERC20.address,
+          decimals: testERC20Decimal,
+          price: 8.8
+        }
+      }
+    },
+  };
 
-  return { w3Bucket, testERC20, Alice, Bob, Caro, Dave };
+  return { w3Bucket, testData, Alice, Bob, Caro, Dave };
 }

@@ -10,16 +10,20 @@ describe('Bucket Editions', () => {
   it('Basic scenario works', async () => {
     const { w3Bucket, testERC20, Alice, Bob, Caro } = await loadFixture(deployW3BucketFixture);
 
-    await w3Bucket.connect(Alice).setBucketEditions([
+    await expect(w3Bucket.connect(Alice).setBucketEditions([
       { editionId: 1, maxMintableSupply: 1_000_000 },
       { editionId: 2, maxMintableSupply: 100_000 },
-    ]);
+    ]))
+      .to.emit(w3Bucket, 'EditionUpdated').withArgs(1, 1_000_000)
+      .to.emit(w3Bucket, 'EditionUpdated').withArgs(2, 100_000);
   
     const testERC20Decimal = await testERC20.decimals();
-    await w3Bucket.connect(Alice).setBucketEditionPrices(2, [
+    await expect(w3Bucket.connect(Alice).setBucketEditionPrices(2, [
       { currency: nativeTokenAddress, price: ethers.utils.parseEther('0.5') },
       { currency: testERC20.address, price: ethers.utils.parseUnits('5', testERC20Decimal) },
-    ]);
+    ]))
+      .to.emit(w3Bucket, 'EditionPriceUpdated').withArgs(2, nativeTokenAddress, ethers.utils.parseEther('0.5'))
+      .to.emit(w3Bucket, 'EditionPriceUpdated').withArgs(2, testERC20.address, ethers.utils.parseUnits('5', testERC20Decimal));
 
     const bucketEditions = _.sortBy(_.map(
       await w3Bucket.getBucketEditions(true),
@@ -46,7 +50,6 @@ describe('Bucket Editions', () => {
     const testERC20TokenPrice = 5;
     const testERC20TokenPriceBN = ethers.utils.parseUnits(_.toString(testERC20TokenPrice), testERC20Decimal);
     const testERC20TokenNegativePriceBN = ethers.utils.parseUnits(_.toString(-testERC20TokenPrice), testERC20Decimal);
-
 
     // mint a Bucket with native ether
     const prevBobBucketBalance = (await w3Bucket.balanceOf(Bob.address)).toNumber();
