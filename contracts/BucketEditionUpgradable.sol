@@ -19,28 +19,57 @@ abstract contract BucketEditionUpgradable is Initializable, AccessControlEnumera
     using EnumerableSetUpgradeable for EnumerableSetUpgradeable.UintSet;
     using CountersUpgradeable for CountersUpgradeable.Counter;
 
+    /// @dev Only EDITIONS_ADMIN_ROLE holders can set bucket editions and prices
     bytes32 public constant EDITIONS_ADMIN_ROLE = keccak256("EDITIONS_ADMIN_ROLE");
+    /// @dev Only WITHDRAWER_ROLE holders can withdraw ethers and erc20 tokens
     bytes32 public constant WITHDRAWER_ROLE = keccak256("WITHDRAWER_ROLE");
 
+    /// @dev Minimal bucket edition id
     uint256 public constant MIN_EDITION_ID = 1;
+    /// @dev Maximal bucket edition id
     uint256 public constant MAX_EDITION_ID = 100;
+    /// @dev First token id of an edition is: EDITION_TOKEN_ID_FACTOR * editionId
     uint256 public constant EDITION_TOKEN_ID_FACTOR = 1_000_000;
+    /// @dev Upper limit of an bucket edition's maximal mintable supply
     uint256 public constant EDITION_MAX_MINTABLE_SUPPLY = 1_000_000;
 
+    /// @dev All bucket editions that have ever set
     EnumerableSetUpgradeable.UintSet internal _allEditions;
+    /// @dev Maximal mintable supply of all editions
     EnumerableMapUpgradeable.UintToUintMap internal _allEditionsMaxSupply;
+    /// @dev Currently minted supply of all editions
     EnumerableMapUpgradeable.UintToUintMap internal _allEditionsCurrentSupplyMinted;
+    /// @dev Version numbers of all editions
     EnumerableMapUpgradeable.UintToUintMap internal _allEditionsVersion;
+    /// @dev Latest active edition version number
     CountersUpgradeable.Counter internal _currentEditionsVersion;
 
+    /// @dev Mapping from edition id to (Currency Address => Price) mapping
     mapping(uint256 => EnumerableMapUpgradeable.AddressToUintMap) internal _allEditionPrices;
 
+    /**
+     * @notice                      Paramer structs for EDITIONS_ADMIN_ROLE holders to update bucket editions
+     * 
+     * @param editionId             Edition id, should be between [MIN_EDITION_ID, MAX_EDITION_ID]
+     * 
+     * @param maxMintableSupply     Maximal mintable supply of the bucket edition, should be no larger than EDITION_MAX_MINTABLE_SUPPLY
+     */
     struct BucketEditionParams {
-        // 1, 2, 3, ...
         uint256 editionId;
         uint256 maxMintableSupply;
     }
 
+    /**
+     * @notice                      Detailed information about a bucket edition
+     * 
+     * @param editionId             Edition id
+     * 
+     * @param active                Whether this edition is active. Only active edition tokens could be minted
+     * 
+     * @param maxMintableSupply     Maximal mintable supply of this edition
+     * 
+     * @param currentSupplyMinted   At any given point, the number of tokens that have been minted of this edition
+     */
     struct BucketEdition {
         uint256 editionId;
         bool active;
@@ -48,28 +77,39 @@ abstract contract BucketEditionUpgradable is Initializable, AccessControlEnumera
         uint256 currentSupplyMinted;
     }
 
+    /**
+     * @notice                      A price information of a bucket edition
+     * 
+     * @param currency              The currency in which the `price` must be paid
+     * 
+     * @param price                 The price required to pay to mint a token of the associated bucket edition
+     */
     struct EditionPrice {
         address currency;
         uint256 price;
     }
 
+    /// @notice Emitted when a bucket edition is updated
     event EditionUpdated(
         uint256 indexed editionId,
         uint256 indexed maxMintableSupply
     );
 
+    /// @notice Emitted when a bucket edition's price is updated
     event EditionPriceUpdated(
         uint256 indexed editionId,
         address indexed currency,
         uint256 indexed price
     );
 
+    /// @notice Emitted when a bucket token is minted
     event BucketMinted(
         address indexed to,
         uint256 indexed editionId,
         uint256 indexed tokenId
     );
 
+    /// @notice Emitted when a currency is withdrawn
     event Withdraw(
         address indexed to,
         address indexed currency,
@@ -106,6 +146,9 @@ abstract contract BucketEditionUpgradable is Initializable, AccessControlEnumera
         _allEditionsCurrentSupplyMinted.set(editionId, supplyMinted + 1);
     }
 
+    /**
+     * @dev Update bucket editions
+     */
     function setBucketEditions(BucketEditionParams[] calldata editions)
         external
         onlyRole(EDITIONS_ADMIN_ROLE) {
@@ -166,6 +209,9 @@ abstract contract BucketEditionUpgradable is Initializable, AccessControlEnumera
         return editions;
     }
 
+    /**
+     * @dev Update a bucket edition prices
+     */
     function setBucketEditionPrices(uint256 editionId, EditionPrice[] calldata prices)
         external
         onlyRole(EDITIONS_ADMIN_ROLE) 
@@ -202,6 +248,9 @@ abstract contract BucketEditionUpgradable is Initializable, AccessControlEnumera
         return prices;
     }
 
+    /**
+     * @dev Withdraw native ether or erc20 tokens from the contract
+     */
     function withdraw(address to, address currency)
         external
         onlyRole(WITHDRAWER_ROLE) 
