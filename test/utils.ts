@@ -8,7 +8,7 @@ export const nativeTokenAddress = '0x0000000000000000000000000000000000000000';
 
 export async function deployW3BucketFixture() {
   const W3Bucket = await ethers.getContractFactory('W3Bucket');
-  const w3BucketProxy = await upgrades.deployProxy(W3Bucket, ['W3Bucket', 'BK3']);
+  const w3BucketProxy = await upgrades.deployProxy(W3Bucket, ['W3Bucket', 'W3BKT']);
   const w3Bucket = W3Bucket__factory.connect(w3BucketProxy.address, provider);
 
   const TestERC20 = await ethers.getContractFactory('TestERC20');
@@ -22,7 +22,7 @@ export async function deployW3BucketFixture() {
 
 export async function deployW3BucketWithEditionsFixture() {
   const W3Bucket = await ethers.getContractFactory('W3Bucket');
-  const w3BucketProxy = await upgrades.deployProxy(W3Bucket, ['W3Bucket', 'BK3']);
+  const w3BucketProxy = await upgrades.deployProxy(W3Bucket, ['W3Bucket', 'W3BKT']);
   const w3Bucket = W3Bucket__factory.connect(w3BucketProxy.address, provider);
 
   const TestERC20 = await ethers.getContractFactory('TestERC20');
