@@ -51,7 +51,7 @@ describe('Bucket Editions', () => {
     const testERC20TokenPriceBN = ethers.utils.parseUnits(_.toString(testERC20TokenPrice), testERC20Decimal);
     const testERC20TokenNegativePriceBN = ethers.utils.parseUnits(_.toString(-testERC20TokenPrice), testERC20Decimal);
 
-    // mint a Bucket with native ether
+    // mint a Bucket with native token
     const prevBobBucketBalance = (await w3Bucket.balanceOf(Bob.address)).toNumber();
     const tokenURI1 = 'ipfs://<METADATA_CID_1>';
     await expect(w3Bucket.connect(Bob).mint(Bob.address, 2, nativeTokenAddress, tokenURI1, {value: nativeTokenPriceBN}))
@@ -74,7 +74,7 @@ describe('Bucket Editions', () => {
     const tokenId2 = (await w3Bucket.tokenOfOwnerByIndex(Bob.address, prevBobBucketBalance + 1)).toNumber();
     expect(await w3Bucket.tokenURI(tokenId2)).to.equal(tokenURI2);
 
-    // withdraw ether
+    // withdraw native token
     await expect(w3Bucket.connect(Alice).withdraw(Caro.address, nativeTokenAddress))
       .to.emit(w3Bucket, 'Withdraw').withArgs(Caro.address, nativeTokenAddress, nativeTokenPriceBN)
       .to.changeEtherBalances([w3Bucket.address, Caro.address], [nativeTokenPriceNegativeBN, nativeTokenPriceBN]);
@@ -155,11 +155,11 @@ describe('Bucket Editions', () => {
         'Trying to mint active edition with unsupported token should fail'
       );
 
-    // trying to mint active edition with insufficient ether should fail
+    // trying to mint active edition with insufficient native token should fail
     await expect(w3Bucket.connect(Bob).mint(Bob.address, 6, nativeTokenAddress, tokenURI1, {value: ethers.utils.parseEther(_.toString(nativeTokenPrice / 2))}))
       .to.be.rejectedWith(
         /Must send required price/,
-        'Trying to mint active edition with insufficient ether should fail'
+        'Trying to mint active edition with insufficient native token should fail'
       );
     
     // trying to mint active edition with insufficient erc20 token should fail

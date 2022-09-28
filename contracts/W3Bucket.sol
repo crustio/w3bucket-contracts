@@ -104,7 +104,9 @@ contract W3Bucket is
             // console.log('mint, native currency, msg.value: %s', msg.value);
             require(msg.value == price, "Must send required price");
         }
-        CurrencyTransferLib.transferCurrency(currency, _msgSender(), address(this), price);
+        else {
+            CurrencyTransferLib.transferCurrency(currency, _msgSender(), address(this), price);
+        }
 
         uint256 nextTokenId = _nextEditionTokenId(editionId);
         _safeMint(to, nextTokenId);

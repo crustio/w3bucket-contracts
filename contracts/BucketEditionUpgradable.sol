@@ -99,7 +99,7 @@ abstract contract BucketEditionUpgradable is Initializable, AccessControlEnumera
     event EditionPriceUpdated(
         uint256 indexed editionId,
         address indexed currency,
-        uint256 indexed price
+        uint256 price
     );
 
     /// @notice Emitted when a bucket token is minted
@@ -113,7 +113,7 @@ abstract contract BucketEditionUpgradable is Initializable, AccessControlEnumera
     event Withdraw(
         address indexed to,
         address indexed currency,
-        uint256 indexed amount
+        uint256 amount
     );
 
     function __BucketEditionUpgradable_init() internal onlyInitializing {
@@ -249,7 +249,7 @@ abstract contract BucketEditionUpgradable is Initializable, AccessControlEnumera
     }
 
     /**
-     * @dev Withdraw native ether or erc20 tokens from the contract
+     * @dev Withdraw native token or erc20 tokens from the contract
      */
     function withdraw(address to, address currency)
         external
