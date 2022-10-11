@@ -33,12 +33,12 @@ describe("Upgradable", () => {
     // bucket editions should be kept
     const bucketEditions = _.sortBy(_.map(
       await w3BucketV2.getBucketEditions(true),
-      edition => _.pick(edition, ['editionId', 'active', 'maxMintableSupply', 'currentSupplyMinted'])
+      edition => _.pick(edition, ['editionId', 'active', 'capacityInGigabytes', 'maxMintableSupply', 'currentSupplyMinted'])
     ), e => e.editionId.toNumber());
     expect(bucketEditions).to.deep.equal([
-      { editionId: 6, active: true, maxMintableSupply: 666, currentSupplyMinted: 0 },
-      { editionId: 8, active: true, maxMintableSupply: 888, currentSupplyMinted: 1 },
-      { editionId: 9, active: true, maxMintableSupply: 999, currentSupplyMinted: 0 },
+      { editionId: 6, active: true, capacityInGigabytes: 666, maxMintableSupply: 666, currentSupplyMinted: 0 },
+      { editionId: 8, active: true, capacityInGigabytes: 888, maxMintableSupply: 888, currentSupplyMinted: 1 },
+      { editionId: 9, active: true, capacityInGigabytes: 999, maxMintableSupply: 999, currentSupplyMinted: 0 },
     ]);
 
     // bucket prices should be kept

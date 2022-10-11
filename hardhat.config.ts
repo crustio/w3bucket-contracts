@@ -71,7 +71,7 @@ const config: HardhatUserConfig = {
     flat: true,
   },
   mocha: {
-    parallel: true
+    parallel: false
   },
   typechain: {
     outDir: "typechain",

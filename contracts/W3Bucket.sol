@@ -84,7 +84,7 @@ contract W3Bucket is
         uint256 editionId,
         address currency,
         string calldata uri
-    ) external payable nonReentrant 
+    ) external virtual payable nonReentrant 
     {
         require(_msgSender() == tx.origin, 'BOT');
 
@@ -113,7 +113,8 @@ contract W3Bucket is
         _setTokenURI(nextTokenId, uri);
         _editionTokenMinted(editionId);
 
-        emit BucketMinted(to, editionId, nextTokenId);
+        uint capacityInGigabytes = _allEditionsCapacity.get(editionId);
+        emit BucketMinted(to, editionId, nextTokenId, capacityInGigabytes, currency, price);
     }
 
     // The following functions are overrides required by Solidity.

@@ -37,6 +37,8 @@ abstract contract BucketEditionUpgradable is Initializable, AccessControlEnumera
     EnumerableSetUpgradeable.UintSet internal _allEditions;
     /// @dev Maximal mintable supply of all editions
     EnumerableMapUpgradeable.UintToUintMap internal _allEditionsMaxSupply;
+    /// @dev Capacity limit of all editions
+    EnumerableMapUpgradeable.UintToUintMap internal _allEditionsCapacity;
     /// @dev Currently minted supply of all editions
     EnumerableMapUpgradeable.UintToUintMap internal _allEditionsCurrentSupplyMinted;
     /// @dev Version numbers of all editions
@@ -52,10 +54,13 @@ abstract contract BucketEditionUpgradable is Initializable, AccessControlEnumera
      * 
      * @param editionId             Edition id, should be between [MIN_EDITION_ID, MAX_EDITION_ID]
      * 
+     * @param capacityInGigabytes   Capacity of this edition buckets, in gigabytes (GB). 0 for unlimited
+     * 
      * @param maxMintableSupply     Maximal mintable supply of the bucket edition, should be no larger than EDITION_MAX_MINTABLE_SUPPLY
      */
     struct BucketEditionParams {
         uint256 editionId;
+        uint256 capacityInGigabytes;
         uint256 maxMintableSupply;
     }
 
@@ -66,6 +71,8 @@ abstract contract BucketEditionUpgradable is Initializable, AccessControlEnumera
      * 
      * @param active                Whether this edition is active. Only active edition tokens could be minted
      * 
+     * @param capacityInGigabytes   Capacity of this edition buckets, in gigabytes (GB). 0 for unlimited
+     * 
      * @param maxMintableSupply     Maximal mintable supply of this edition
      * 
      * @param currentSupplyMinted   At any given point, the number of tokens that have been minted of this edition
@@ -73,6 +80,7 @@ abstract contract BucketEditionUpgradable is Initializable, AccessControlEnumera
     struct BucketEdition {
         uint256 editionId;
         bool active;
+        uint256 capacityInGigabytes;
         uint256 maxMintableSupply;
         uint256 currentSupplyMinted;
     }
@@ -92,7 +100,8 @@ abstract contract BucketEditionUpgradable is Initializable, AccessControlEnumera
     /// @notice Emitted when a bucket edition is updated
     event EditionUpdated(
         uint256 indexed editionId,
-        uint256 indexed maxMintableSupply
+        uint256 capacityInGigabytes,
+        uint256 maxMintableSupply
     );
 
     /// @notice Emitted when a bucket edition's price is updated
@@ -106,7 +115,10 @@ abstract contract BucketEditionUpgradable is Initializable, AccessControlEnumera
     event BucketMinted(
         address indexed to,
         uint256 indexed editionId,
-        uint256 indexed tokenId
+        uint256 indexed tokenId,
+        uint256 capacityInGigabytes,
+        address currency,
+        uint256 price
     );
 
     /// @notice Emitted when a currency is withdrawn
@@ -151,6 +163,7 @@ abstract contract BucketEditionUpgradable is Initializable, AccessControlEnumera
      */
     function setBucketEditions(BucketEditionParams[] calldata editions)
         external
+        virtual
         onlyRole(EDITIONS_ADMIN_ROLE) {
         _currentEditionsVersion.increment();
         uint256 version = _currentEditionsVersion.current();
@@ -160,16 +173,18 @@ abstract contract BucketEditionUpgradable is Initializable, AccessControlEnumera
 
             BucketEditionParams memory edition = editions[i];
             _allEditions.add(edition.editionId);
+            _allEditionsCapacity.set(edition.editionId, edition.capacityInGigabytes);
             _allEditionsMaxSupply.set(edition.editionId, edition.maxMintableSupply);
             _allEditionsVersion.set(edition.editionId, version);
             // console.log('setBucketEditions, %s, edition id: %s, maxMintableSupply: %s', i, edition.editionId, edition.maxMintableSupply);
 
-            emit EditionUpdated(edition.editionId, edition.maxMintableSupply);
+            emit EditionUpdated(edition.editionId, edition.capacityInGigabytes, edition.maxMintableSupply);
         }
     }
 
     function getBucketEditions(bool activeOnly)
         public
+        virtual
         view
         returns (BucketEdition[] memory)
     {
@@ -200,6 +215,7 @@ abstract contract BucketEditionUpgradable is Initializable, AccessControlEnumera
             if (shouldInclude) {
                 editions[index].editionId = editionId;
                 editions[index].active = active;
+                editions[index].capacityInGigabytes = _allEditionsCapacity.get(editionId);
                 editions[index].maxMintableSupply = _allEditionsMaxSupply.get(editionId);
                 editions[index].currentSupplyMinted = currentSupplyMinted;
                 index++;
@@ -214,6 +230,7 @@ abstract contract BucketEditionUpgradable is Initializable, AccessControlEnumera
      */
     function setBucketEditionPrices(uint256 editionId, EditionPrice[] calldata prices)
         external
+        virtual
         onlyRole(EDITIONS_ADMIN_ROLE) 
     {
         _requireActiveEdition(editionId);
@@ -233,6 +250,7 @@ abstract contract BucketEditionUpgradable is Initializable, AccessControlEnumera
 
     function getBucketEditionPrices(uint256 editionId)
         public
+        virtual
         view
         returns (EditionPrice[] memory)
     {
@@ -253,6 +271,7 @@ abstract contract BucketEditionUpgradable is Initializable, AccessControlEnumera
      */
     function withdraw(address to, address currency)
         external
+        virtual
         onlyRole(WITHDRAWER_ROLE) 
     {
         uint256 amount = 0;

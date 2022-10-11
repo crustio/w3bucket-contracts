@@ -49,8 +49,8 @@ describe("Access Control", () => {
     const { w3Bucket, Alice, Bob, Caro } = await loadFixture(deployW3BucketFixture);
 
     await expect(w3Bucket.connect(Bob).setBucketEditions([
-      { editionId: 1, maxMintableSupply: 1_000_000 },
-      { editionId: 2, maxMintableSupply: 100_000 },
+      { editionId: 1, capacityInGigabytes: 1024, maxMintableSupply: 1_000_000 },
+      { editionId: 2, capacityInGigabytes: 10240, maxMintableSupply: 100_000 },
     ]))
       .to.be.rejectedWith(
         /AccessControl/,
@@ -64,11 +64,11 @@ describe("Access Control", () => {
       .to.equal(Bob.address);
     
     await expect(w3Bucket.connect(Bob).setBucketEditions([
-      { editionId: 1, maxMintableSupply: 1_000_000 },
-      { editionId: 2, maxMintableSupply: 100_000 },
+      { editionId: 1, capacityInGigabytes: 1024, maxMintableSupply: 1_000_000 },
+      { editionId: 2, capacityInGigabytes: 10240, maxMintableSupply: 100_000 },
     ]))
-      .to.emit(w3Bucket, 'EditionUpdated').withArgs(1, 1_000_000)
-      .to.emit(w3Bucket, 'EditionUpdated').withArgs(2, 100_000);
+      .to.emit(w3Bucket, 'EditionUpdated').withArgs(1, 1024, 1_000_000)
+      .to.emit(w3Bucket, 'EditionUpdated').withArgs(2, 10240, 100_000);
     
     await expect(w3Bucket.connect(Bob).setBucketEditionPrices(2, [
       { currency: nativeTokenAddress, price: ethers.utils.parseEther('0.5') },

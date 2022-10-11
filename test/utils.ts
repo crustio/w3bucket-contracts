@@ -32,9 +32,9 @@ export async function deployW3BucketWithEditionsFixture() {
   const  [Alice, Bob, Caro, Dave]  = await ethers.getSigners();
 
   await w3Bucket.connect(Alice).setBucketEditions([
-    { editionId: 6, maxMintableSupply: 666 },
-    { editionId: 8, maxMintableSupply: 888 },
-    { editionId: 9, maxMintableSupply: 999 },
+    { editionId: 6, capacityInGigabytes: 666, maxMintableSupply: 666 },
+    { editionId: 8, capacityInGigabytes: 888, maxMintableSupply: 888 },
+    { editionId: 9, capacityInGigabytes: 999, maxMintableSupply: 999 },
   ]);
 
   const testERC20Decimal = await testERC20.decimals();
