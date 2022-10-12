@@ -49,3 +49,10 @@ To verify:
 # Use `hardhat-shorthand`:
 $ hh verify --network [mainnet/rinkeby/goerli] <address>
 ```
+
+To initialize:
+
+```sh
+# Use `hardhat-shorthand`:
+$ hh run scripts/initialize.ts --network [mainnet/rinkeby/goerli]
+```
