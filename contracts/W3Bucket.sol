@@ -115,6 +115,7 @@ contract W3Bucket is
 
         uint capacityInGigabytes = _allEditionsCapacity.get(editionId);
         emit BucketMinted(to, editionId, nextTokenId, capacityInGigabytes, currency, price);
+        emit PermanentURI(uri, nextTokenId);
     }
 
     // The following functions are overrides required by Solidity.

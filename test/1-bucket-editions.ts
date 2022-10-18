@@ -70,6 +70,7 @@ describe('Bucket Editions', () => {
     await expect(w3Bucket.connect(Bob).mint(Bob.address, 2, testERC20.address, tokenURI2))
       .to.emit(w3Bucket, 'Transfer').withArgs(anyValue, Bob.address, anyValue)
       .to.emit(w3Bucket, 'BucketMinted').withArgs(Bob.address, 2, anyValue, 10240, testERC20.address, testERC20TokenPriceBN)
+      .to.emit(w3Bucket, 'PermanentURI').withArgs(tokenURI2, anyValue)
       .to.changeTokenBalances(testERC20, [Bob.address, w3Bucket.address], [testERC20TokenNegativePriceBN, testERC20TokenPriceBN]);
       expect(await w3Bucket.balanceOf(Bob.address)).to.equal(prevBobBucketBalance + 2);
     const tokenId2 = (await w3Bucket.tokenOfOwnerByIndex(Bob.address, prevBobBucketBalance + 1)).toNumber();
@@ -176,6 +177,7 @@ describe('Bucket Editions', () => {
     await expect(w3Bucket.connect(Bob).mint(Bob.address, 6, nativeTokenAddress, tokenURI1, {value: nativeTokenPriceBN}))
       .to.emit(w3Bucket, 'Transfer').withArgs(anyValue, Bob.address, anyValue)
       .to.emit(w3Bucket, 'BucketMinted').withArgs(Bob.address, 6, anyValue, 0, nativeTokenAddress, nativeTokenPriceBN)
+      .to.emit(w3Bucket, 'PermanentURI').withArgs(tokenURI1, anyValue)
       .to.changeEtherBalances([Bob.address, w3Bucket.address], [nativeTokenPriceNegativeBN, nativeTokenPriceBN]);
     
     // trying to mint exceeding maxMintableSupply should fail

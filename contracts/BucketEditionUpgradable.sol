@@ -121,6 +121,12 @@ abstract contract BucketEditionUpgradable is Initializable, AccessControlEnumera
         uint256 price
     );
 
+    // @notice Indicate to OpenSea that an NFT's metadata is no longer changeable by anyone (in other words, it is "frozen")
+    event PermanentURI(
+        string _value,
+        uint256 indexed _id
+    );
+
     /// @notice Emitted when a currency is withdrawn
     event Withdraw(
         address indexed to,

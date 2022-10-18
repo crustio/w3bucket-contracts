@@ -2,15 +2,15 @@
   "manifestVersion": "3.2",
   "proxies": [
     {
-      "address": "0xD34Eb1D246754D9de745B580EadB24c4050AC73d",
-      "txHash": "0xdad8cc102d8077168f34ce875c59fba18802755c6bbb1965028442a6de0af7bc",
+      "address": "0x398663842680332A1AbA3B03bd6dB47aE984994C",
+      "txHash": "0x25e2d1cb1bed26fa0313cc837d2fc0995c32e8be2bf6afb0a6a87d1eb1584eae",
       "kind": "uups"
     }
   ],
   "impls": {
-    "80553cc2f686c1df68cef57788e93087434815c3f1ae68061df7c103cc604c1c": {
-      "address": "0x41a984df5Bae9743ffA2a563f0A2D41229d545be",
-      "txHash": "0x04d56935133504e38b4671e2c2856ff32abf8d8d04256a562549f0a0e5ed257b",
+    "918619412ee437be6515f621e09c5f2c15f811e5705351234b41bb7421b6c4e7": {
+      "address": "0x636636d7b41e82Fe38a6D39492F7D7b15C8590F3",
+      "txHash": "0xf28f6f1591497f3a2b4f42ceb03b0177f510c9afcba9739605791f8c2be0ce48",
       "layout": {
         "storage": [
           {
@@ -194,7 +194,7 @@
             "label": "_roleMembers",
             "offset": 0,
             "slot": "351",
-            "type": "t_mapping(t_bytes32,t_struct(AddressSet)6559_storage)",
+            "type": "t_mapping(t_bytes32,t_struct(AddressSet)5923_storage)",
             "contract": "AccessControlEnumerableUpgradeable",
             "src": "@openzeppelin/contracts-upgradeable/access/AccessControlEnumerableUpgradeable.sol:22"
           },
@@ -250,7 +250,7 @@
             "label": "_allEditions",
             "offset": 0,
             "slot": "601",
-            "type": "t_struct(UintSet)6716_storage",
+            "type": "t_struct(UintSet)6080_storage",
             "contract": "BucketEditionUpgradable",
             "src": "contracts/BucketEditionUpgradable.sol:37"
           },
@@ -258,7 +258,7 @@
             "label": "_allEditionsMaxSupply",
             "offset": 0,
             "slot": "603",
-            "type": "t_struct(UintToUintMap)5371_storage",
+            "type": "t_struct(UintToUintMap)4735_storage",
             "contract": "BucketEditionUpgradable",
             "src": "contracts/BucketEditionUpgradable.sol:39"
           },
@@ -266,7 +266,7 @@
             "label": "_allEditionsCapacity",
             "offset": 0,
             "slot": "606",
-            "type": "t_struct(UintToUintMap)5371_storage",
+            "type": "t_struct(UintToUintMap)4735_storage",
             "contract": "BucketEditionUpgradable",
             "src": "contracts/BucketEditionUpgradable.sol:41"
           },
@@ -274,7 +274,7 @@
             "label": "_allEditionsCurrentSupplyMinted",
             "offset": 0,
             "slot": "609",
-            "type": "t_struct(UintToUintMap)5371_storage",
+            "type": "t_struct(UintToUintMap)4735_storage",
             "contract": "BucketEditionUpgradable",
             "src": "contracts/BucketEditionUpgradable.sol:43"
           },
@@ -282,7 +282,7 @@
             "label": "_allEditionsVersion",
             "offset": 0,
             "slot": "612",
-            "type": "t_struct(UintToUintMap)5371_storage",
+            "type": "t_struct(UintToUintMap)4735_storage",
             "contract": "BucketEditionUpgradable",
             "src": "contracts/BucketEditionUpgradable.sol:45"
           },
@@ -290,7 +290,7 @@
             "label": "_currentEditionsVersion",
             "offset": 0,
             "slot": "615",
-            "type": "t_struct(Counter)4403_storage",
+            "type": "t_struct(Counter)3767_storage",
             "contract": "BucketEditionUpgradable",
             "src": "contracts/BucketEditionUpgradable.sol:47"
           },
@@ -298,7 +298,7 @@
             "label": "_allEditionPrices",
             "offset": 0,
             "slot": "616",
-            "type": "t_mapping(t_uint256,t_struct(AddressToUintMap)5815_storage)",
+            "type": "t_mapping(t_uint256,t_struct(AddressToUintMap)5179_storage)",
             "contract": "BucketEditionUpgradable",
             "src": "contracts/BucketEditionUpgradable.sol:50"
           },
@@ -308,7 +308,7 @@
             "slot": "617",
             "type": "t_array(t_uint256)46_storage",
             "contract": "BucketEditionUpgradable",
-            "src": "contracts/BucketEditionUpgradable.sol:299"
+            "src": "contracts/BucketEditionUpgradable.sol:305"
           }
         ],
         "types": {
@@ -368,7 +368,7 @@
             "label": "mapping(bytes32 => bytes32)",
             "numberOfBytes": "32"
           },
-          "t_mapping(t_bytes32,t_struct(AddressSet)6559_storage)": {
+          "t_mapping(t_bytes32,t_struct(AddressSet)5923_storage)": {
             "label": "mapping(bytes32 => struct EnumerableSetUpgradeable.AddressSet)",
             "numberOfBytes": "32"
           },
@@ -388,7 +388,7 @@
             "label": "mapping(uint256 => string)",
             "numberOfBytes": "32"
           },
-          "t_mapping(t_uint256,t_struct(AddressToUintMap)5815_storage)": {
+          "t_mapping(t_uint256,t_struct(AddressToUintMap)5179_storage)": {
             "label": "mapping(uint256 => struct EnumerableMapUpgradeable.AddressToUintMap)",
             "numberOfBytes": "32"
           },
@@ -400,48 +400,48 @@
             "label": "string",
             "numberOfBytes": "32"
           },
-          "t_struct(AddressSet)6559_storage": {
+          "t_struct(AddressSet)5923_storage": {
             "label": "struct EnumerableSetUpgradeable.AddressSet",
             "members": [
               {
                 "label": "_inner",
-                "type": "t_struct(Set)6258_storage",
+                "type": "t_struct(Set)5622_storage",
                 "offset": 0,
                 "slot": "0"
               }
             ],
             "numberOfBytes": "64"
           },
-          "t_struct(AddressToUintMap)5815_storage": {
+          "t_struct(AddressToUintMap)5179_storage": {
             "label": "struct EnumerableMapUpgradeable.AddressToUintMap",
             "members": [
               {
                 "label": "_inner",
-                "type": "t_struct(Bytes32ToBytes32Map)5141_storage",
+                "type": "t_struct(Bytes32ToBytes32Map)4505_storage",
                 "offset": 0,
                 "slot": "0"
               }
             ],
             "numberOfBytes": "96"
           },
-          "t_struct(Bytes32Set)6452_storage": {
+          "t_struct(Bytes32Set)5816_storage": {
             "label": "struct EnumerableSetUpgradeable.Bytes32Set",
             "members": [
               {
                 "label": "_inner",
-                "type": "t_struct(Set)6258_storage",
+                "type": "t_struct(Set)5622_storage",
                 "offset": 0,
                 "slot": "0"
               }
             ],
             "numberOfBytes": "64"
           },
-          "t_struct(Bytes32ToBytes32Map)5141_storage": {
+          "t_struct(Bytes32ToBytes32Map)4505_storage": {
             "label": "struct EnumerableMapUpgradeable.Bytes32ToBytes32Map",
             "members": [
               {
                 "label": "_keys",
-                "type": "t_struct(Bytes32Set)6452_storage",
+                "type": "t_struct(Bytes32Set)5816_storage",
                 "offset": 0,
                 "slot": "0"
               },
@@ -454,7 +454,7 @@
             ],
             "numberOfBytes": "96"
           },
-          "t_struct(Counter)4403_storage": {
+          "t_struct(Counter)3767_storage": {
             "label": "struct CountersUpgradeable.Counter",
             "members": [
               {
@@ -484,7 +484,7 @@
             ],
             "numberOfBytes": "64"
           },
-          "t_struct(Set)6258_storage": {
+          "t_struct(Set)5622_storage": {
             "label": "struct EnumerableSetUpgradeable.Set",
             "members": [
               {
@@ -502,24 +502,24 @@
             ],
             "numberOfBytes": "64"
           },
-          "t_struct(UintSet)6716_storage": {
+          "t_struct(UintSet)6080_storage": {
             "label": "struct EnumerableSetUpgradeable.UintSet",
             "members": [
               {
                 "label": "_inner",
-                "type": "t_struct(Set)6258_storage",
+                "type": "t_struct(Set)5622_storage",
                 "offset": 0,
                 "slot": "0"
               }
             ],
             "numberOfBytes": "64"
           },
-          "t_struct(UintToUintMap)5371_storage": {
+          "t_struct(UintToUintMap)4735_storage": {
             "label": "struct EnumerableMapUpgradeable.UintToUintMap",
             "members": [
               {
                 "label": "_inner",
-                "type": "t_struct(Bytes32ToBytes32Map)5141_storage",
+                "type": "t_struct(Bytes32ToBytes32Map)4505_storage",
                 "offset": 0,
                 "slot": "0"
               }
