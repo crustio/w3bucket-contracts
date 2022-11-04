@@ -16,7 +16,7 @@ describe('Bucket Editions', () => {
     ]))
       .to.emit(w3Bucket, 'EditionUpdated').withArgs(1, 1024, 1_000_000)
       .to.emit(w3Bucket, 'EditionUpdated').withArgs(2, 10240, 100_000);
-  
+
     const testERC20Decimal = await testERC20.decimals();
     await expect(w3Bucket.connect(Alice).setBucketEditionPrices(2, [
       { currency: nativeTokenAddress, price: ethers.utils.parseEther('0.5') },
@@ -30,8 +30,8 @@ describe('Bucket Editions', () => {
       edition => _.pick(edition, ['editionId', 'active', 'capacityInGigabytes', 'maxMintableSupply', 'currentSupplyMinted'])
     ), e => e.editionId.toNumber());
     expect(bucketEditions).to.deep.equal([
-      { editionId: 1, active: true, capacityInGigabytes: 1024, maxMintableSupply: 1_000_000, currentSupplyMinted: 0},
-      { editionId: 2, active: true, capacityInGigabytes: 10240, maxMintableSupply: 100_000, currentSupplyMinted: 0},
+      { editionId: 1, active: true, capacityInGigabytes: 1024, maxMintableSupply: 1_000_000, currentSupplyMinted: 0 },
+      { editionId: 2, active: true, capacityInGigabytes: 10240, maxMintableSupply: 100_000, currentSupplyMinted: 0 },
     ]);
 
     const secondEditionPrices = _.sortBy(_.map(
@@ -54,7 +54,7 @@ describe('Bucket Editions', () => {
     // mint a Bucket with native token
     const prevBobBucketBalance = (await w3Bucket.balanceOf(Bob.address)).toNumber();
     const tokenURI1 = 'ipfs://<METADATA_CID_1>';
-    await expect(w3Bucket.connect(Bob).mint(Bob.address, 2, nativeTokenAddress, tokenURI1, {value: nativeTokenPriceBN}))
+    await expect(w3Bucket.connect(Bob).mint(Bob.address, 2, nativeTokenAddress, tokenURI1, { value: nativeTokenPriceBN }))
       .to.emit(w3Bucket, 'Transfer').withArgs(anyValue, Bob.address, anyValue)
       .to.changeEtherBalances([Bob.address, w3Bucket.address], [nativeTokenPriceNegativeBN, nativeTokenPriceBN]);
 
@@ -72,7 +72,7 @@ describe('Bucket Editions', () => {
       .to.emit(w3Bucket, 'BucketMinted').withArgs(Bob.address, 2, anyValue, 10240, testERC20.address, testERC20TokenPriceBN)
       .to.emit(w3Bucket, 'PermanentURI').withArgs(tokenURI2, anyValue)
       .to.changeTokenBalances(testERC20, [Bob.address, w3Bucket.address], [testERC20TokenNegativePriceBN, testERC20TokenPriceBN]);
-      expect(await w3Bucket.balanceOf(Bob.address)).to.equal(prevBobBucketBalance + 2);
+    expect(await w3Bucket.balanceOf(Bob.address)).to.equal(prevBobBucketBalance + 2);
     const tokenId2 = (await w3Bucket.tokenOfOwnerByIndex(Bob.address, prevBobBucketBalance + 1)).toNumber();
     expect(await w3Bucket.tokenURI(tokenId2)).to.equal(tokenURI2);
 
@@ -100,8 +100,8 @@ describe('Bucket Editions', () => {
       edition => _.pick(edition, ['editionId', 'active', 'capacityInGigabytes', 'maxMintableSupply', 'currentSupplyMinted'])
     ), e => e.editionId.toNumber());
     expect(bucketEditions).to.deep.equal([
-      { editionId: 1, active: true, capacityInGigabytes: 1024, maxMintableSupply: 1_000_000, currentSupplyMinted: 0},
-      { editionId: 2, active: true, capacityInGigabytes: 10240, maxMintableSupply: 100_000, currentSupplyMinted: 0},
+      { editionId: 1, active: true, capacityInGigabytes: 1024, maxMintableSupply: 1_000_000, currentSupplyMinted: 0 },
+      { editionId: 2, active: true, capacityInGigabytes: 10240, maxMintableSupply: 100_000, currentSupplyMinted: 0 },
     ]);
 
     // update editions
@@ -118,11 +118,11 @@ describe('Bucket Editions', () => {
       edition => _.pick(edition, ['editionId', 'active', 'capacityInGigabytes', 'maxMintableSupply', 'currentSupplyMinted'])
     ), e => e.editionId.toNumber());
     expect(bucketEditionsV2).to.deep.equal([
-      { editionId: 2, active: true, capacityInGigabytes: 1024, maxMintableSupply: 100_000, currentSupplyMinted: 0},
-      { editionId: 5, active: true, capacityInGigabytes: 2048, maxMintableSupply: 99_000, currentSupplyMinted: 0},
-      { editionId: 6, active: true, capacityInGigabytes: 0, maxMintableSupply: 1, currentSupplyMinted: 0},
-      { editionId: 9, active: true, capacityInGigabytes: 10240, maxMintableSupply: 999, currentSupplyMinted: 0},
-      { editionId: 10, active: true, capacityInGigabytes: 5000, maxMintableSupply: 888_888, currentSupplyMinted: 0}
+      { editionId: 2, active: true, capacityInGigabytes: 1024, maxMintableSupply: 100_000, currentSupplyMinted: 0 },
+      { editionId: 5, active: true, capacityInGigabytes: 2048, maxMintableSupply: 99_000, currentSupplyMinted: 0 },
+      { editionId: 6, active: true, capacityInGigabytes: 0, maxMintableSupply: 1, currentSupplyMinted: 0 },
+      { editionId: 9, active: true, capacityInGigabytes: 10240, maxMintableSupply: 999, currentSupplyMinted: 0 },
+      { editionId: 10, active: true, capacityInGigabytes: 5000, maxMintableSupply: 888_888, currentSupplyMinted: 0 }
     ]);
 
     // set prices to some editions
@@ -137,14 +137,14 @@ describe('Bucket Editions', () => {
     const nativeTokenPriceBN = ethers.utils.parseEther(_.toString(nativeTokenPrice));
     const nativeTokenPriceNegativeBN = ethers.utils.parseEther(_.toString(-nativeTokenPrice));
     const tokenURI1 = 'ipfs://<METADATA_CID_1>';
-    await expect(w3Bucket.connect(Bob).mint(Bob.address, 1, nativeTokenAddress, tokenURI1, {value: nativeTokenPriceBN}))
+    await expect(w3Bucket.connect(Bob).mint(Bob.address, 1, nativeTokenAddress, tokenURI1, { value: nativeTokenPriceBN }))
       .to.be.rejectedWith(
         /Invalid or inactive edition/,
         'Trying to mint outdated editon should fail'
       );
-    
+
     // trying to mint active edition without price set should fail
-    await expect(w3Bucket.connect(Bob).mint(Bob.address, 9, nativeTokenAddress, tokenURI1, {value: nativeTokenPriceBN}))
+    await expect(w3Bucket.connect(Bob).mint(Bob.address, 9, nativeTokenAddress, tokenURI1, { value: nativeTokenPriceBN }))
       .to.be.rejectedWith(
         /Invalid currency/,
         'Trying to mint active edition without price set should fail'
@@ -158,12 +158,12 @@ describe('Bucket Editions', () => {
       );
 
     // trying to mint active edition with insufficient native token should fail
-    await expect(w3Bucket.connect(Bob).mint(Bob.address, 6, nativeTokenAddress, tokenURI1, {value: ethers.utils.parseEther(_.toString(nativeTokenPrice / 2))}))
+    await expect(w3Bucket.connect(Bob).mint(Bob.address, 6, nativeTokenAddress, tokenURI1, { value: ethers.utils.parseEther(_.toString(nativeTokenPrice / 2)) }))
       .to.be.rejectedWith(
         /Must send required price/,
         'Trying to mint active edition with insufficient native token should fail'
       );
-    
+
     // trying to mint active edition with insufficient erc20 token should fail
     const testERC20TokenPrice = 5;
     const testERC20TokenPriceBN = ethers.utils.parseUnits(_.toString(testERC20TokenPrice), testERC20Decimal);
@@ -172,21 +172,21 @@ describe('Bucket Editions', () => {
         /ERC20: insufficient allowance/,
         'Trying to mint active edition with insufficient erc20 token should fail'
       );
-    
+
     // mint
-    await expect(w3Bucket.connect(Bob).mint(Bob.address, 6, nativeTokenAddress, tokenURI1, {value: nativeTokenPriceBN}))
+    await expect(w3Bucket.connect(Bob).mint(Bob.address, 6, nativeTokenAddress, tokenURI1, { value: nativeTokenPriceBN }))
       .to.emit(w3Bucket, 'Transfer').withArgs(anyValue, Bob.address, anyValue)
       .to.emit(w3Bucket, 'BucketMinted').withArgs(Bob.address, 6, anyValue, 0, nativeTokenAddress, nativeTokenPriceBN)
       .to.emit(w3Bucket, 'PermanentURI').withArgs(tokenURI1, anyValue)
       .to.changeEtherBalances([Bob.address, w3Bucket.address], [nativeTokenPriceNegativeBN, nativeTokenPriceBN]);
-    
+
     // trying to mint exceeding maxMintableSupply should fail
     await expect(w3Bucket.connect(Bob).mint(Bob.address, 6, testERC20.address, tokenURI1))
       .to.be.rejectedWith(
         /Exceed max mintable supply/,
         'Trying to mint exceeding maxMintableSupply should fail'
       );
-    
+
     // update editions
     await w3Bucket.connect(Alice).setBucketEditions([
       { editionId: 66, capacityInGigabytes: 666, maxMintableSupply: 6666 },
@@ -198,9 +198,9 @@ describe('Bucket Editions', () => {
     ), e => e.editionId.toNumber());
     // inactive editions with minted buckets should be queryable
     expect(bucketEditionsV3).to.deep.equal([
-      { editionId: 6, active: false, capacityInGigabytes: 0, maxMintableSupply: 1, currentSupplyMinted: 1},
-      { editionId: 66, active: true, capacityInGigabytes: 666, maxMintableSupply: 6666, currentSupplyMinted: 0},
-      { editionId: 88, active: true, capacityInGigabytes: 888, maxMintableSupply: 8888, currentSupplyMinted: 0}
+      { editionId: 6, active: false, capacityInGigabytes: 0, maxMintableSupply: 1, currentSupplyMinted: 1 },
+      { editionId: 66, active: true, capacityInGigabytes: 666, maxMintableSupply: 6666, currentSupplyMinted: 0 },
+      { editionId: 88, active: true, capacityInGigabytes: 888, maxMintableSupply: 8888, currentSupplyMinted: 0 }
     ]);
 
     // inactive edition could be activated again
@@ -215,23 +215,30 @@ describe('Bucket Editions', () => {
     ), e => e.editionId.toNumber());
     // inactive editions with minted buckets should be queryable
     expect(bucketEditionsV4).to.deep.equal([
-      { editionId: 6, active: true, capacityInGigabytes: 0, maxMintableSupply: 6, currentSupplyMinted: 1},
-      { editionId: 66, active: true, capacityInGigabytes: 666, maxMintableSupply: 6666, currentSupplyMinted: 0},
-      { editionId: 88, active: true, capacityInGigabytes: 888, maxMintableSupply: 8888, currentSupplyMinted: 0}
+      { editionId: 6, active: true, capacityInGigabytes: 0, maxMintableSupply: 6, currentSupplyMinted: 1 },
+      { editionId: 66, active: true, capacityInGigabytes: 666, maxMintableSupply: 6666, currentSupplyMinted: 0 },
+      { editionId: 88, active: true, capacityInGigabytes: 888, maxMintableSupply: 8888, currentSupplyMinted: 0 }
     ]);
+
+    // edition price could remove all
+    await w3Bucket.connect(Alice).setBucketEditionPrices(6, []);
+
+    let bucketEditionsV4Prices = _.sortBy(_.map(
+      await w3Bucket.getBucketEditionPrices(6),
+      price => _.pick(price, ['currency', 'price'])
+    ), 'currency');
+    expect(bucketEditionsV4Prices.length).equals(0);
 
     // edition price could be updated
     await w3Bucket.connect(Alice).setBucketEditionPrices(6, [
-      // { currency: nativeTokenAddress, price: ethers.utils.parseEther('0.6') },
       { currency: testERC20.address, price: ethers.utils.parseUnits('6', testERC20Decimal) },
     ]);
 
-    const bucketEditionsV4Prices = _.sortBy(_.map(
+    bucketEditionsV4Prices = _.sortBy(_.map(
       await w3Bucket.getBucketEditionPrices(6),
       price => _.pick(price, ['currency', 'price'])
     ), 'currency');
     expect(bucketEditionsV4Prices).to.deep.equal([
-      // { currency: nativeTokenAddress, price: ethers.utils.parseEther('0.6') },
       { currency: testERC20.address, price: ethers.utils.parseUnits('6', testERC20Decimal) },
     ]);
 
