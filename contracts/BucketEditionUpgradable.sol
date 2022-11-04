@@ -242,7 +242,7 @@ abstract contract BucketEditionUpgradable is Initializable, AccessControlEnumera
         _requireActiveEdition(editionId);
 
         EnumerableMapUpgradeable.AddressToUintMap storage editionPrices = _allEditionPrices[editionId];
-        for (uint256 i = 0; i < editionPrices.length(); i++) {
+        for (uint256 i = 0; i < editionPrices.length(); ) {
             (address key, ) = editionPrices.at(i);
             editionPrices.remove(key);
         }

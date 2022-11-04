@@ -222,7 +222,7 @@ describe('Bucket Editions', () => {
 
     // edition price could be updated
     await w3Bucket.connect(Alice).setBucketEditionPrices(6, [
-      { currency: nativeTokenAddress, price: ethers.utils.parseEther('0.6') },
+      // { currency: nativeTokenAddress, price: ethers.utils.parseEther('0.6') },
       { currency: testERC20.address, price: ethers.utils.parseUnits('6', testERC20Decimal) },
     ]);
 
@@ -231,7 +231,7 @@ describe('Bucket Editions', () => {
       price => _.pick(price, ['currency', 'price'])
     ), 'currency');
     expect(bucketEditionsV4Prices).to.deep.equal([
-      { currency: nativeTokenAddress, price: ethers.utils.parseEther('0.6') },
+      // { currency: nativeTokenAddress, price: ethers.utils.parseEther('0.6') },
       { currency: testERC20.address, price: ethers.utils.parseUnits('6', testERC20Decimal) },
     ]);
 
