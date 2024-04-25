@@ -15,6 +15,8 @@ const chainIds = {
   mainnet: 1,
   rinkeby: 4,
   goerli: 5,
+  "op-mainnet": 10,
+  "op-sepolia": 11155420
 };
 
 // Ensure that we have all the environment variables we need.
@@ -36,6 +38,12 @@ function createTestnetConfig(network: keyof typeof chainIds): NetworkUserConfig 
       break;
     case "goerli":
       nodeUrl = `https://goerli.infura.io/v3/${infuraKey}`;
+      break;
+    case "op-mainnet":
+      nodeUrl = `https://optimism-mainnet.infura.io/v3/${infuraKey}`;
+      break;
+    case "op-sepolia":
+      nodeUrl = `https://optimism-sepolia.infura.io/v3/${infuraKey}`;
       break;
   }
 
@@ -82,6 +90,8 @@ const config: HardhatUserConfig = {
       mainnet: process.env.ETHERSCAN_KEY || '',
       rinkeby: process.env.ETHERSCAN_KEY || '',
       goerli: process.env.ETHERSCAN_KEY || '',
+      optimisticEthereum: process.env.OP_ETHERSCAN_KEY || '',
+      // "op-sepolia": process.env.ETHERSCAN_KEY || '',
     },
   },
   gasReporter: {
@@ -96,6 +106,8 @@ if (privateKey) {
     mainnet: createTestnetConfig("mainnet"),
     goerli: createTestnetConfig("goerli"),
     rinkeby: createTestnetConfig("rinkeby"),
+    "op-mainnet": createTestnetConfig("op-mainnet"),
+    "op-sepolia": createTestnetConfig("op-sepolia"),
   };
 }
 

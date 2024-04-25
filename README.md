@@ -5,7 +5,7 @@
 Cloning repository and install dependencies:
 
 ```sh
-$ git https://github.com/decooio/w3bucket-contracts.git
+$ git https://github.com/crustio/w3bucket-contracts.git
 
 $ cd w3bucket-contracts
 
@@ -40,19 +40,19 @@ To deploy to remote network
 
 ```sh
 # Use `hardhat-shorthand`:
-$ hh run scripts/deploy.ts --network [mainnet/rinkeby/goerli]
+$ hh run scripts/deploy.ts --network [mainnet/rinkeby/goerli/op-mainnet/op-sepolia]
 ```
 
 To verify:
 
 ```sh
 # Use `hardhat-shorthand`:
-$ hh verify --network [mainnet/rinkeby/goerli] <address>
+$ hh verify --network [mainnet/rinkeby/goerli/op-mainnet/op-sepolia] <address>
 ```
 
 To initialize:
 
 ```sh
 # Use `hardhat-shorthand`:
-$ hh run scripts/initialize.ts --network [mainnet/rinkeby/goerli]
+$ hh run scripts/initialize.ts --network [mainnet/rinkeby/goerli/op-mainnet/op-sepolia]
 ```

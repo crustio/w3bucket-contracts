@@ -6,9 +6,12 @@ import { W3Bucket__factory } from '../typechain/factories/contracts';
 
 export const nativeTokenAddress = '0x0000000000000000000000000000000000000000';
 
+// const w3BucketAddress = "0x7aE8066d7e630f08a7dd60C6f067d93Ef5EA8a39"; // op-sepolia
+const w3BucketAddress = "0x7aE8066d7e630f08a7dd60C6f067d93Ef5EA8a39";  // op-mainnet
+
 async function main() {
-  const uupsDeployInfo = JSON.parse(fs.readFileSync(`./.openzeppelin/${hre.network.name}.json`, 'utf8'));
-  const w3BucketAddress = uupsDeployInfo.proxies[0].address;
+  // const uupsDeployInfo = JSON.parse(fs.readFileSync(`./.openzeppelin/${hre.network.name}.json`, 'utf8'));
+  // const w3BucketAddress = uupsDeployInfo.proxies[0].address;
   console.log(`W3Bucket contract address: ${w3BucketAddress}`);
 
   const [signer]: SignerWithAddress[] = await ethers.getSigners();
@@ -17,26 +20,36 @@ async function main() {
 
   console.log(`Setting bucket editions.`);
   let tx = await w3Bucket.setBucketEditions([
-    { editionId: 1, capacityInGigabytes: 1024, maxMintableSupply: 1_000_000 },
-    { editionId: 2, capacityInGigabytes: 10240, maxMintableSupply: 100_000 },
+    { editionId: 1, capacityInGigabytes: 10, maxMintableSupply: 1_000_000 },
+    { editionId: 2, capacityInGigabytes: 100, maxMintableSupply: 1_000_000 },
+    { editionId: 3, capacityInGigabytes: 1024, maxMintableSupply: 1_000_000 },
   ]);
   await tx.wait();
   
   console.log(`Setting price for bucket edition 1`);
-  const weth = {
-    address: '0xb4fbf271143f4fbf7b91a5ded31805e42b2208d6',
-    decimals: 18
+  const usdt = {
+    // address: '0xdAC17F958D2ee523a2206206994597C13D831ec7', // mainnet
+    address: '0x94b008aA00579c1307B0EF2c499aD98a8ce58e58', // op-mainnet
+    decimals: 6
   };
+
   tx = await w3Bucket.setBucketEditionPrices(1, [
-    { currency: nativeTokenAddress, price: ethers.utils.parseEther('0.1') },
-    { currency: weth.address, price: ethers.utils.parseUnits('0.2', weth.decimals) },
+    { currency: nativeTokenAddress, price: ethers.utils.parseEther('0.003') },
+    { currency: usdt.address, price: ethers.utils.parseUnits('10', usdt.decimals) },
   ]);
   await tx.wait();
 
   console.log(`Setting price for bucket edition 2`);
   tx = await w3Bucket.setBucketEditionPrices(2, [
-    { currency: nativeTokenAddress, price: ethers.utils.parseEther('0.5') },
-    { currency: weth.address, price: ethers.utils.parseUnits('0.6', weth.decimals) },
+    { currency: nativeTokenAddress, price: ethers.utils.parseEther('0.03') },
+    { currency: usdt.address, price: ethers.utils.parseUnits('100', usdt.decimals) },
+  ]);
+  await tx.wait();
+
+  console.log(`Setting price for bucket edition 3`);
+  tx = await w3Bucket.setBucketEditionPrices(3, [
+    { currency: nativeTokenAddress, price: ethers.utils.parseEther('0.3') },
+    { currency: usdt.address, price: ethers.utils.parseUnits('1000', usdt.decimals) },
   ]);
   await tx.wait();
 

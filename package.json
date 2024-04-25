@@ -1,7 +1,7 @@
 {
   "name": "w3bucket-contracts",
   "version": "1.0.0",
-  "repository": "git@github.com:decooio/w3bucket-contracts.git",
+  "repository": "git@github.com:crustio/w3bucket-contracts.git",
   "author": "gavfu <gavfu@outlook.com>",
   "license": "Apache-2.0",
   "devDependencies": {
