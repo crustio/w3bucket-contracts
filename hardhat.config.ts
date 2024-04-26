@@ -92,7 +92,18 @@ const config: HardhatUserConfig = {
       goerli: process.env.ETHERSCAN_KEY || '',
       optimisticEthereum: process.env.OP_ETHERSCAN_KEY || '',
       // "op-sepolia": process.env.ETHERSCAN_KEY || '',
+      "base-mainnet": process.env.BASESCAN_KEY || "", 
     },
+    customChains: [
+      {
+        network: "base-mainnet",
+        chainId: 8453,
+        urls: {
+          apiURL: "https://api.basescan.org/api",
+          browserURL: "https://basescan.org"
+        }
+      },
+    ]
   },
   gasReporter: {
     coinmarketcap: process.env.COINMARKETCAP_KEY,
@@ -113,6 +124,19 @@ if (privateKey) {
 
 config.networks = {
   ...config.networks,
+  // https://docs.base.org/docs/tools/hardhat
+  "base-mainnet": {
+    chainId: 8453,
+    url: "https://mainnet.base.org",
+    accounts: [privateKey],
+    gasPrice: 1000000000,
+  },
+  "base-sepolia": {
+    chainId: 84532,
+    url: "https://sepolia.base.org",
+    accounts: [privateKey],
+    gasPrice: 1000000000,
+  },
   hardhat: {
     chainId: 1337,
   },

@@ -40,19 +40,19 @@ To deploy to remote network
 
 ```sh
 # Use `hardhat-shorthand`:
-$ hh run scripts/deploy.ts --network [mainnet/rinkeby/goerli/op-mainnet/op-sepolia]
+$ hh run scripts/deploy.ts --network [mainnet/rinkeby/goerli/op-mainnet/op-sepolia/base-mainnet/base-sepolia]
 ```
 
 To verify:
 
 ```sh
 # Use `hardhat-shorthand`:
-$ hh verify --network [mainnet/rinkeby/goerli/op-mainnet/op-sepolia] <address>
+$ hh verify --network [mainnet/rinkeby/goerli/op-mainnet/op-sepolia/base-mainnet/base-sepolia] <address>
 ```
 
 To initialize:
 
 ```sh
 # Use `hardhat-shorthand`:
-$ hh run scripts/initialize.ts --network [mainnet/rinkeby/goerli/op-mainnet/op-sepolia]
+$ hh run scripts/initialize.ts --network [mainnet/rinkeby/goerli/op-mainnet/op-sepolia/base-mainnet/base-sepolia]
 ```

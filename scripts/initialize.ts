@@ -7,7 +7,9 @@ import { W3Bucket__factory } from '../typechain/factories/contracts';
 export const nativeTokenAddress = '0x0000000000000000000000000000000000000000';
 
 // const w3BucketAddress = "0x7aE8066d7e630f08a7dd60C6f067d93Ef5EA8a39"; // op-sepolia
-const w3BucketAddress = "0x7aE8066d7e630f08a7dd60C6f067d93Ef5EA8a39";  // op-mainnet
+// const w3BucketAddress = "0x7aE8066d7e630f08a7dd60C6f067d93Ef5EA8a39";  // op-mainnet
+// const w3BucketAddress = "0x7aE8066d7e630f08a7dd60C6f067d93Ef5EA8a39";  // base-sepolia
+const w3BucketAddress = "0x7aE8066d7e630f08a7dd60C6f067d93Ef5EA8a39";  // base-mainnet
 
 async function main() {
   // const uupsDeployInfo = JSON.parse(fs.readFileSync(`./.openzeppelin/${hre.network.name}.json`, 'utf8'));
@@ -27,29 +29,33 @@ async function main() {
   await tx.wait();
   
   console.log(`Setting price for bucket edition 1`);
-  const usdt = {
-    // address: '0xdAC17F958D2ee523a2206206994597C13D831ec7', // mainnet
-    address: '0x94b008aA00579c1307B0EF2c499aD98a8ce58e58', // op-mainnet
+  // const usdt = {
+  //   // address: '0xdAC17F958D2ee523a2206206994597C13D831ec7', // mainnet
+  //   address: '0x94b008aA00579c1307B0EF2c499aD98a8ce58e58', // op-mainnet
+  //   decimals: 6
+  // };
+  const usdc = {
+    address: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913', // base-mainnet
     decimals: 6
   };
 
   tx = await w3Bucket.setBucketEditionPrices(1, [
     { currency: nativeTokenAddress, price: ethers.utils.parseEther('0.003') },
-    { currency: usdt.address, price: ethers.utils.parseUnits('10', usdt.decimals) },
+    { currency: usdc.address, price: ethers.utils.parseUnits('10', usdc.decimals) },
   ]);
   await tx.wait();
 
   console.log(`Setting price for bucket edition 2`);
   tx = await w3Bucket.setBucketEditionPrices(2, [
     { currency: nativeTokenAddress, price: ethers.utils.parseEther('0.03') },
-    { currency: usdt.address, price: ethers.utils.parseUnits('100', usdt.decimals) },
+    { currency: usdc.address, price: ethers.utils.parseUnits('100', usdc.decimals) },
   ]);
   await tx.wait();
 
   console.log(`Setting price for bucket edition 3`);
   tx = await w3Bucket.setBucketEditionPrices(3, [
     { currency: nativeTokenAddress, price: ethers.utils.parseEther('0.3') },
-    { currency: usdt.address, price: ethers.utils.parseUnits('1000', usdt.decimals) },
+    { currency: usdc.address, price: ethers.utils.parseUnits('1000', usdc.decimals) },
   ]);
   await tx.wait();
 
