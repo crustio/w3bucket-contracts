@@ -119,4 +119,69 @@ describe("Access Control", () => {
       .not.to.rejected;
   });
 
+  it("Admin role transferrable", async () => {
+    const { w3Bucket, Alice, Bob, Caro } = await loadFixture(deployW3BucketFixture);
+
+    const DEFAULT_ADMIN_ROLE = await w3Bucket.DEFAULT_ADMIN_ROLE();
+    const EDITIONS_ADMIN_ROLE = await w3Bucket.EDITIONS_ADMIN_ROLE();
+    const PAUSER_ROLE = await w3Bucket.PAUSER_ROLE();
+    const WITHDRAWER_ROLE = await w3Bucket.WITHDRAWER_ROLE();
+    const UPGRADER_ROLE = await w3Bucket.UPGRADER_ROLE();
+    expect(await w3Bucket.getRoleAdmin(DEFAULT_ADMIN_ROLE)).to.equal(DEFAULT_ADMIN_ROLE);
+    expect(await w3Bucket.getRoleAdmin(EDITIONS_ADMIN_ROLE)).to.equal(DEFAULT_ADMIN_ROLE);
+    expect(await w3Bucket.getRoleAdmin(PAUSER_ROLE)).to.equal(DEFAULT_ADMIN_ROLE);
+    expect(await w3Bucket.getRoleAdmin(WITHDRAWER_ROLE)).to.equal(DEFAULT_ADMIN_ROLE);
+    expect(await w3Bucket.getRoleAdmin(UPGRADER_ROLE)).to.equal(DEFAULT_ADMIN_ROLE);
+
+    // Alice should have all roles now
+    expect(await w3Bucket.hasRole(DEFAULT_ADMIN_ROLE, Alice.address)).to.be.true;
+    expect(await w3Bucket.hasRole(EDITIONS_ADMIN_ROLE, Alice.address)).to.be.true;
+    expect(await w3Bucket.hasRole(PAUSER_ROLE, Alice.address)).to.be.true;
+    expect(await w3Bucket.hasRole(WITHDRAWER_ROLE, Alice.address)).to.be.true;
+    expect(await w3Bucket.hasRole(UPGRADER_ROLE, Alice.address)).to.be.true;
+
+    // Transfer DEFAULT_ADMIN_ROLE to Bob
+    await expect(w3Bucket.connect(Alice).grantRole(DEFAULT_ADMIN_ROLE, Bob.address))
+      .to.emit(w3Bucket, 'RoleGranted').withArgs(DEFAULT_ADMIN_ROLE, Bob.address, Alice.address);
+
+    // Bob revokes all roles from Alice
+    await expect(w3Bucket.connect(Bob).revokeRole(DEFAULT_ADMIN_ROLE, Alice.address))
+      .to.emit(w3Bucket, 'RoleRevoked').withArgs(DEFAULT_ADMIN_ROLE, Alice.address, Bob.address);
+    await expect(w3Bucket.connect(Bob).revokeRole(EDITIONS_ADMIN_ROLE, Alice.address))
+      .to.emit(w3Bucket, 'RoleRevoked').withArgs(EDITIONS_ADMIN_ROLE, Alice.address, Bob.address);
+    await expect(w3Bucket.connect(Bob).revokeRole(PAUSER_ROLE, Alice.address))
+      .to.emit(w3Bucket, 'RoleRevoked').withArgs(PAUSER_ROLE, Alice.address, Bob.address);
+    await expect(w3Bucket.connect(Bob).revokeRole(WITHDRAWER_ROLE, Alice.address))
+      .to.emit(w3Bucket, 'RoleRevoked').withArgs(WITHDRAWER_ROLE, Alice.address, Bob.address);
+    await expect(w3Bucket.connect(Bob).revokeRole(UPGRADER_ROLE, Alice.address))
+      .to.emit(w3Bucket, 'RoleRevoked').withArgs(UPGRADER_ROLE, Alice.address, Bob.address);
+    
+    expect(await w3Bucket.hasRole(DEFAULT_ADMIN_ROLE, Alice.address)).to.be.false;
+    expect(await w3Bucket.hasRole(EDITIONS_ADMIN_ROLE, Alice.address)).to.be.false;
+    expect(await w3Bucket.hasRole(PAUSER_ROLE, Alice.address)).to.be.false;
+    expect(await w3Bucket.hasRole(WITHDRAWER_ROLE, Alice.address)).to.be.false;
+    expect(await w3Bucket.hasRole(UPGRADER_ROLE, Alice.address)).to.be.false;
+
+    // Bob grant himself roles
+    expect(await w3Bucket.hasRole(DEFAULT_ADMIN_ROLE, Bob.address)).to.be.true;
+    expect(await w3Bucket.hasRole(EDITIONS_ADMIN_ROLE, Bob.address)).to.be.false;
+    expect(await w3Bucket.hasRole(PAUSER_ROLE, Bob.address)).to.be.false;
+    expect(await w3Bucket.hasRole(WITHDRAWER_ROLE, Bob.address)).to.be.false;
+    expect(await w3Bucket.hasRole(UPGRADER_ROLE, Bob.address)).to.be.false;
+
+    await expect(w3Bucket.connect(Bob).grantRole(EDITIONS_ADMIN_ROLE, Bob.address))
+      .to.emit(w3Bucket, 'RoleGranted').withArgs(EDITIONS_ADMIN_ROLE, Bob.address, Bob.address);
+    await expect(w3Bucket.connect(Bob).grantRole(PAUSER_ROLE, Bob.address))
+      .to.emit(w3Bucket, 'RoleGranted').withArgs(PAUSER_ROLE, Bob.address, Bob.address);
+    await expect(w3Bucket.connect(Bob).grantRole(WITHDRAWER_ROLE, Bob.address))
+      .to.emit(w3Bucket, 'RoleGranted').withArgs(WITHDRAWER_ROLE, Bob.address, Bob.address);
+    await expect(w3Bucket.connect(Bob).grantRole(UPGRADER_ROLE, Bob.address))
+      .to.emit(w3Bucket, 'RoleGranted').withArgs(UPGRADER_ROLE, Bob.address, Bob.address);
+
+    expect(await w3Bucket.hasRole(EDITIONS_ADMIN_ROLE, Bob.address)).to.be.true;
+    expect(await w3Bucket.hasRole(PAUSER_ROLE, Bob.address)).to.be.true;
+    expect(await w3Bucket.hasRole(WITHDRAWER_ROLE, Bob.address)).to.be.true;
+    expect(await w3Bucket.hasRole(UPGRADER_ROLE, Bob.address)).to.be.true;
+
+  });
 });
